@@ -1,20 +1,17 @@
 import css from './FeedbackOptions.module.css';
-import setData from '../../utils/utils';
-// import PropTypes from 'prop-types';
 
-export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
-  const buttonsNames = setData(options);
+export const FeedbackOptions = ({ options, handleChengeValue }) => {
   return (
     <>
       <div className={css.buttons}>
-        {buttonsNames.map(buttonItem => {
+        {options.map(buttonItem => {
           return (
             <button
               key={buttonItem}
               type="button"
               className={css.btn}
               data-name={buttonItem}
-              onClick={onLeaveFeedback}
+              onClick={handleChengeValue}
             >
               {buttonItem}
             </button>
@@ -25,12 +22,3 @@ export const FeedbackOptions = ({ options, onLeaveFeedback }) => {
     </>
   );
 };
-
-// FeedbackOptions.PropTypes = {
-//   options: PropTypes.shape({
-//     good: PropTypes.number,
-//     neutral: PropTypes.number,
-//     bad: PropTypes.number,
-//   }),
-//   onLeaveFeedback: PropTypes.func,
-// };

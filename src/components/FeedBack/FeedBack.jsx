@@ -1,66 +1,62 @@
+import { useState } from 'react';
 import { FeedbackOptions } from 'components/FeedbackOptions/FeedbackOptions';
 import { NotificationMessage } from 'components/NotificationMessage/NotificationMessage';
 import { Section } from 'components/Section/Section';
 import { Statistics } from 'components/Statistics/Statistics';
-import { Component } from 'react';
 
-class FeedBack extends Component {
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+export const FeedBack = () => {
+  const [good, goodValue] = useState(0);
+  const [neutral, neutralValue] = useState(0);
+  const [bad, badValue] = useState(0);
 
-  onLeaveFeedback = ({ target }) => {
-    const { dataset } = target;
-    this.setState(prevState => {
-      return {
-        [dataset.name]: prevState[dataset.name] + 1,
-      };
-    });
-  };
+  const options = ['good', 'neutral', 'bad'];
 
-  countTotalFeedback = () => {
-    let total = 0;
-    for (let key in this.state) {
-      total += this.state[key];
+  const handleChengeValue = event => {
+    switch (event.target.dataset.name) {
+      case 'good':
+        goodValue(good + 1);
+        break;
+
+      case 'neutral':
+        neutralValue(neutral + 1);
+        break;
+
+      case 'bad':
+        badValue(bad + 1);
+        break;
+
+      default:
+        break;
     }
-    return total;
   };
 
-  countPositiveFeedbackPercentage = () => {
-    return Math.floor((this.state.good * 100) / this.countTotalFeedback());
+  const countTotalFeedback = () => {
+    return good + neutral + bad;
   };
 
-  render() {
-    const { good, neutral, bad } = this.state;
-    const {
-      countTotalFeedback,
-      countPositiveFeedbackPercentage,
-      onLeaveFeedback,
-    } = this;
-    return (
-      <>
-        <Section title={'Please leave feedback'}>
-          <FeedbackOptions
-            options={this.state}
-            onLeaveFeedback={onLeaveFeedback}
+  const countPositiveFeedbackPercentage = () => {
+    return Math.floor((good * 100) / countTotalFeedback());
+  };
+
+  return (
+    <>
+      <Section title={'Please leave feedback'}>
+        <FeedbackOptions
+          options={options}
+          handleChengeValue={handleChengeValue}
+        />
+        {countTotalFeedback() ? (
+          <Statistics
+            good={good}
+            neutral={neutral}
+            bad={bad}
+            total={countTotalFeedback}
+            positivePercentage={countPositiveFeedbackPercentage}
           />
-          {countTotalFeedback() ? (
-            <Statistics
-              good={good}
-              neutral={neutral}
-              bad={bad}
-              total={countTotalFeedback}
-              positivePercentage={countPositiveFeedbackPercentage}
-            />
-          ) : (
-            <NotificationMessage message="There is no feedback" />
-          )}
-        </Section>
-      </>
-    );
-  }
-}
-
-export default FeedBack;
+        ) : (
+          <NotificationMessage message="There is no feedback" />
+        )}
+      </Section>
+    </>
+  );
+};
