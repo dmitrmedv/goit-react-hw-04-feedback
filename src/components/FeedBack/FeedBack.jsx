@@ -14,15 +14,15 @@ export const FeedBack = () => {
   const handleChengeValue = event => {
     switch (event.target.dataset.name) {
       case 'good':
-        goodValue(good + 1);
+        goodValue(prev => prev + 1);
         break;
 
       case 'neutral':
-        neutralValue(neutral + 1);
+        neutralValue(prev => prev + 1);
         break;
 
       case 'bad':
-        badValue(bad + 1);
+        badValue(prev => prev + 1);
         break;
 
       default:
